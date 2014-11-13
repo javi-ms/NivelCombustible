@@ -7,6 +7,8 @@ package Taxi;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 /**
  *
@@ -15,11 +17,14 @@ import java.util.Calendar;
 public class Taximetro extends javax.swing.JFrame {
 
     int contador = 0;
-     Calendar calendario = Calendar.getInstance();
+    Calendar horaInicio;
     //formato para las horas
     DateFormat formateadorHora = DateFormat.getTimeInstance(DateFormat.MEDIUM);
     //formato para las fechas
     DateFormat formateadorFecha = DateFormat.getDateInstance(DateFormat.MEDIUM);
+    final int IVA = 21;
+    final double TARIFAPORMINUTO = 0.50;
+    final double PRECIOBAJADABANDERA = 0.50;
 
     public Taximetro() {
         initComponents();
@@ -39,13 +44,13 @@ public class Taximetro extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        jTextFieldLatitud = new javax.swing.JTextField();
+        jTextFieldLongitud = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jTextFieldDestino = new javax.swing.JTextField();
         jToggleButtonTerminar = new javax.swing.JToggleButton();
         jToggleButtonEmpezar = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -53,6 +58,7 @@ public class Taximetro extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jTextField4 = new javax.swing.JTextField();
+        jLabelMapaRuta = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,6 +67,10 @@ public class Taximetro extends javax.swing.JFrame {
         jLabel1.setText("Latitud");
 
         jLabel2.setText("Longitud");
+
+        jTextFieldLatitud.setText("36.679619");
+
+        jTextFieldLongitud.setText("-5.444740");
 
         jLabel3.setText("Grados");
 
@@ -78,7 +88,7 @@ public class Taximetro extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addComponent(jLabel5)
                 .addGap(27, 27, 27)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(151, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -87,7 +97,7 @@ public class Taximetro extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -102,8 +112,8 @@ public class Taximetro extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE))
+                    .addComponent(jTextFieldLatitud)
+                    .addComponent(jTextFieldLongitud, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -117,12 +127,12 @@ public class Taximetro extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldLatitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldLongitud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -149,6 +159,13 @@ public class Taximetro extends javax.swing.JFrame {
         jLabel6.setText("Tarjeta de Credito");
 
         jButton1.setText("Comprobar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabelMapaRuta.setText("MAPA");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,23 +173,27 @@ public class Taximetro extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 285, Short.MAX_VALUE)
-                        .addComponent(jLabel6)
-                        .addGap(124, 124, 124))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addComponent(jToggleButtonEmpezar, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jToggleButtonTerminar, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(29, 29, 29))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabelMapaRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jTextField4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton1))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(124, 124, 124)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -181,16 +202,21 @@ public class Taximetro extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButtonTerminar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButtonEmpezar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 92, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jToggleButtonTerminar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jToggleButtonEmpezar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabelMapaRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 61, Short.MAX_VALUE))
         );
 
         pack();
@@ -200,40 +226,82 @@ public class Taximetro extends javax.swing.JFrame {
 
         //activa el jToggleButtonTerminar
         jToggleButtonTerminar.setEnabled(true);
- //Creacion del objeto calendar para las fechas y horas
-  
-    
+        //Creacion del objeto calendar para las fechas y horas
+
+        horaInicio = Calendar.getInstance();
+
         jTextArea1.setText("Ticket" + "\n");
         jTextArea1.append("======" + "\n");
         jTextArea1.append("Nº de ticket: " + contador++ + "\n");
-        jTextArea1.append("Fecha: " + formateadorFecha.format(calendario.getTime()) + "\n");
-        jTextArea1.append("Hora de bajada de badera: " + formateadorHora.format(calendario.getTime()) + "\n");
+        jTextArea1.append("Fecha: " + formateadorFecha.format(horaInicio.getTime()) + "\n");
+        jTextArea1.append("Hora de bajada de badera: " + formateadorHora.format(horaInicio.getTime()) + "\n");
+
+        //Cambia los siguientes valores por las direciones de origen y destino deseadas
+        String origen = jTextFieldLatitud.getText() + "," + jTextFieldLongitud.getText();
+        String destino = jTextFieldDestino.getText();
+        //Hay que sustituir los espacios por el carácter %20 para que se
+        //  interprete bien la URL que se generará
+        destino = destino.replaceAll(" ", "%20");
+        //Cambia el nombre [etiqueta] por el nombre de un objeto JLabel (etiqueta) que
+        //  has debido colocar antes en el formulario y que será donde se muestre el mapa.
+        //  Deja la etiqueta del formulario sin ningún texto en el diseño.
+        javax.swing.JLabel jLabelMapa = jLabelMapaRuta;
+        //Indica aquí el tamaño que desees para el mapa
+        int tamHorizontal = 200;
+        int tamVertical = 200;
+        //Puedes encontrar más información sobre el uso de mapas estáticos de Google Maps aquí:
+        //  http://code.google.com/intl/es-ES/apis/maps/documentation/staticmaps/
+
+    //A partir de aquí no hace falta cambiar nada
+        try {
+            String direccionImagenMapa = "http://maps.google.com/maps/api/staticmap?path="
+                    + origen + "|" + destino + "&size=" + tamHorizontal + "x" + tamVertical
+                    + "&language=ES&sensor=false";
+            System.out.println(direccionImagenMapa);
+            java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+            java.awt.Image imagenMapa = toolkit.getImage(new java.net.URL(direccionImagenMapa));
+            jLabelMapa.setIcon(new javax.swing.ImageIcon(imagenMapa));
+        } catch (java.net.MalformedURLException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La dirección de imagen indicada no es correcta");
+        }
 
         jToggleButtonEmpezar.setEnabled(false);
-
-
     }//GEN-LAST:event_jToggleButtonEmpezarActionPerformed
 
     private void jToggleButtonTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonTerminarActionPerformed
 
         jToggleButtonEmpezar.setEnabled(true);
-        Calendar calendario2 = Calendar.getInstance();
-        int iva=21;
-        double tarifaPorMinuto=0.50;
-        org.apache.commons.lang3.time.DurationFormatUtils tiempo = new org.apache.commons.lang3.time.DurationFormatUtils();
-        long tiempo1= calendario.getTimeInMillis();
-        long tiempo2 = calendario2.getTimeInMillis();
-       // double calculo=((tarifaPorMinuto*(tiempo)*21)/100;
-        jTextArea1.append("Hora fin de trayecto " + formateadorHora.format(calendario2.getTime()) + "\n");
-        jTextArea1.append("Duracion de trayecto "+String.valueOf(((tiempo2-tiempo1)/1000)/60)+ "\n");
+        Calendar horaFin = Calendar.getInstance();
+
+        long tiempoInicio = horaInicio.getTimeInMillis();
+        long tiempoLlegada = horaFin.getTimeInMillis();
+
+        //Calculando el tiempo que se ha tardado en milisegundos
+        long calculoTiempoMS = (tiempoLlegada - tiempoInicio);
+        //dandole formato de H:M:S
+        String formatoTiempoLlegada = DurationFormatUtils.formatDurationHMS(calculoTiempoMS);
+
+        double precio = (calculoTiempoMS / 1000) / 60 * TARIFAPORMINUTO;
+        double precioConIva = (precio * IVA) / 100;
+
+        jTextArea1.append("Hora fin de trayecto " + formateadorHora.format(horaFin.getTime()) + "\n");
+        jTextArea1.append("Duracion de trayecto " + formatoTiempoLlegada + "\n");
         jTextArea1.append("Tarifa por minuto: 0.50€" + "\n");
-        jTextArea1.append("Importe: " + "\n");
-        //jTextArea1.append("IVA = "+ (iva*tarifaPorMinuto)/100);
-        jTextArea1.append("Importe Total: ");
-//        String tarifaPorMinuto = "";
+        jTextArea1.append("Importe: " + precio + "\n");
+        jTextArea1.append("IVA = " + IVA + "% \n");
+        jTextArea1.append("Importe Total: " + PRECIOBAJADABANDERA + precioConIva + "\n");
 
         jToggleButtonTerminar.setEnabled(false);
     }//GEN-LAST:event_jToggleButtonTerminarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //Abrir ventana emergente
+        JOptionPane.showMessageDialog(
+                this,
+                "Tarjeta Invalida",
+                "Tarjeta",
+                JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -278,14 +346,15 @@ public class Taximetro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelMapaRuta;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextFieldDestino;
+    private javax.swing.JTextField jTextFieldLatitud;
+    private javax.swing.JTextField jTextFieldLongitud;
     private javax.swing.JToggleButton jToggleButtonEmpezar;
     private javax.swing.JToggleButton jToggleButtonTerminar;
     // End of variables declaration//GEN-END:variables

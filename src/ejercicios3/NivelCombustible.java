@@ -119,25 +119,20 @@ public class NivelCombustible extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int capDep = Integer.valueOf(jTextField1.getText());
         int contenido = Integer.valueOf(jTextField2.getText());
-        int anchoBar = Integer.valueOf(jTextField3.getText());
+        int anchoBarra = Integer.valueOf(jTextField3.getText());
         int reserva = Integer.valueOf(jTextField4.getText());
-        String nivel;
-        for (int c = 0; c <= contenido; c++) {
-            switch (contenido) {
-
-                case 0:
-                    nivel = "0";
-                    break;
-                case 1:
-                    nivel = "1";
-                    break;
-                case 2:
-                    nivel = "2";
-                    break;
-                default:
-                    nivel = "Error";
+        for (int c = 1; c <= capDep; c++) {
+           // for (int a = 0; a <= anchoBarra; a++) {
+              //  System.out.println("\n");
+                for (int i = 0; i < contenido; i++) {
+                    System.out.println(contenido - reserva);
+                    System.out.println("2");
+                    System.out.println("1");
+//                for (int j = 0; j < reserva; j++) {
+//                    System.out.println("1");                  
+//                }
+           //     }
             }
-            System.out.println(nivel);
         }
 
 
